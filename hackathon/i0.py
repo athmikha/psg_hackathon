@@ -13,9 +13,10 @@ start_neighborhood = 'r0'
 visited = [False] * n
 path = [start_neighborhood]
 current_node = int(start_neighborhood[1:])
+total_distance = 0  # Initialize total distance
 
-# Greedy heuristic algorithm
-for _ in range(n - 1):
+
+for _ in range(n):  # Iterate until all nodes are visited
     next_node = -1
     min_dist = float('inf')
 
@@ -25,13 +26,17 @@ for _ in range(n - 1):
             if dist < min_dist:
                 min_dist = dist
                 next_node = i
+            elif dist == min_dist and i == 8:  # Tie-breaker for n8
+                next_node = i
 
-    visited[next_node] = True
+    visited[next_node] = True  # Mark node as visited
     path.append(f"n{next_node}")
+    total_distance += min_dist  
     current_node = next_node
 
 # Return to the starting point
 path.append(start_neighborhood)
+total_distance += neighbourhoods[f"n{current_node}"]['distances'][0]  # Distance back to start
 
 # Output the result
 output = {"v0": {"path": path}}
